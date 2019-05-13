@@ -1,3 +1,3 @@
 #!/bin/bash
 
-irw | ./radyjko
+irw | ./radyjko -ir 2> /dev/null
