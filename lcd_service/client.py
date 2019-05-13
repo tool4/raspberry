@@ -9,15 +9,15 @@ message = 'This is the message.  It will be repeated.'
 
 try:
     while True:
-        message = raw_input("Type something to test this out: ") 
+        message = raw_input("Type something:\n")
         # Send data
         print >>sys.stderr, 'sending "%s"' % message
         sent = sock.sendto(message, server_address)
     
         # Receive response
-        print >>sys.stderr, 'waiting to receive'
-        data, server = sock.recvfrom(4096)
-        print >>sys.stderr, 'received "%s"' % data
+        #print >>sys.stderr, 'waiting to receive'
+        #data, server = sock.recvfrom(4096)
+        #print >>sys.stderr, 'received "%s"' % data
     
 finally:
     print >>sys.stderr, 'closing socket'

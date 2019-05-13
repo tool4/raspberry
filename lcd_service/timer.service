@@ -1,9 +1,10 @@
 [Unit]
-Description=LCD date|time|ip
+Description=timer
 Requires=
-After=network.target
+After=network-online.target
+
 [Service]
-ExecStart=/usr/bin/python /home/pi/git/raspberry/lcd_service/lcd_service.py
+ExecStart=/usr/bin/python /home/pi/git/raspberry/lcd_service/timer.py
 WorkingDirectory=/home/pi/git/raspberry/lcd_service/
 StandardOutput=inherit
 StandardError=inherit
