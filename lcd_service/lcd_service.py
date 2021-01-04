@@ -21,19 +21,59 @@ lcd = CharLCD(
     pins_data=[13, 6, 5, 11],
     compat_mode = True)
 
-lcd.write_string("Waiting...")
+BACKLIGHT_PIN = 12
+log_to_file = 1
+
+#PWM @ 1000 Hz
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BACKLIGHT_PIN, GPIO.OUT)
+D2A = GPIO.PWM(BACKLIGHT_PIN, 1000)
+D2A.start(50)
+timeout = 2
+
+def clamp(minvalue, value, maxvalue):
+    return max(minvalue, min(value, maxvalue))
+
+lcd.write_string("Starting...")
 file = open("log_lcd.txt","w", buffering=1)
 
-while True:
-    data, address = sock.recvfrom(4096)
-    file.write("received: %s\n" % data)
-    if data:
-        mode = data[:4]
-        data = data[6:]
-        #print(mode)
-        data = (data + 16 * " ")[:16]
-        lcd.cursor_pos = (0, 0)
-        lcd.write_string(data)
-        #lcd.cursor_pos = (1, 0)
-        #lcd.write_string(substr_c)
+try:
+    while True:
+        data, address = sock.recvfrom(4096)
+        if(log_to_file == 1):
+            print("received: %s\n" % data)
+            file.write("received: %s\n" % data)
+        if data:
+            mode = data[:6]
+            msg = data[6:]
+            print(mode, msg)
+            if(mode == "LIGHT:"):
+                lit = int(data[6:9])
+                clamp(0, lit, 100)
+                D2A.ChangeDutyCycle(lit)
+                lcd.cursor_pos = (1, 0)
+                lcd_msg = ("BACKLIGHT: " + data[6:9] + " %" + 16 * " ")[:16]
+                lcd.write_string(lcd_msg)
+                timeout = 3
+            else:
+                if(mode == "TIME: "):
+                    lcd.cursor_pos = (0, 0)
+                else:
+                    lcd.cursor_pos = (1, 0)
+                    timeout = 3
+                lcd_msg = (msg + 16 * " ")[:16]
+                lcd.write_string(lcd_msg)
+                lcd.cursor_pos = (1, 0)
+                if(timeout > 0):
+                    timeout -= 1
+                else:
+                    lcd.cursor_pos = (1, 3)
+                    lcd.write_string((10 * "-")[:10])
+                lcd.cursor_pos = (1, 0)
 
+
+finally:
+    print("ERROR\n")
+    lcd.write_string("ERROR")
+    file.write("ERROR\n")
+    file.close()
