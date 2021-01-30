@@ -6,7 +6,7 @@ import datetime
 # Create a UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-server_address = ('localhost', 10001)
+server_address = ('192.168.0.4', 10001)
 message = 'This is the message.  It will be repeated.'
 
 try:

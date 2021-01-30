@@ -1,9 +1,10 @@
 [Unit]
-Description=LCD date|time|ip
+Description=Get net info for LCD service
+
 Requires=
 After=network.target
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/git/raspberry/lcd_service/lcd_service.py
+ExecStart=/usr/bin/python3 /home/pi/git/raspberry/lcd_service/net_info.py
 WorkingDirectory=/home/pi/git/raspberry/lcd_service/
 StandardOutput=inherit
 StandardError=inherit

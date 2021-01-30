@@ -5,7 +5,7 @@ import sys
 import os
 
 ir_socket_address = "/var/run/lirc/lircd"
-lcd_server_address = ('localhost', 10001)
+lcd_server_address = ('192.168.0.4', 10001)
 
 # Create a TCP socket
 ir_sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)

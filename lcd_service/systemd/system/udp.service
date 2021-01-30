@@ -4,7 +4,7 @@ Requires=
 After=network-online.target
 
 [Service]
-ExecStart=/usr/bin/python /home/pi/git/raspberry/lcd_service/timer.py
+ExecStart=/usr/bin/python /home/pi/git/raspberry/lcd_service/udp_service.py
 WorkingDirectory=/home/pi/git/raspberry/lcd_service/
 StandardOutput=inherit
 StandardError=inherit
