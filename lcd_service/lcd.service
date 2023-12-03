@@ -3,7 +3,7 @@ Description=LCD date|time|ip
 Requires=
 After=network.target
 [Service]
-ExecStart=/usr/bin/python /home/pi/git/raspberry/lcd_service/lcd_service.py
+ExecStart=/usr/bin/python /home/pi/git/raspberry/lcd_service/lcd_service.py > /home/pi/git/raspberry/lcd_service/lcd_service.log 2>&1
 WorkingDirectory=/home/pi/git/raspberry/lcd_service/
 StandardOutput=inherit
 StandardError=inherit

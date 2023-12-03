@@ -1,3 +1,7 @@
 *.txt
 btns.py
 files
+~*
+#*
+
+

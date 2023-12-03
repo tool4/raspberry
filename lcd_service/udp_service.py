@@ -5,6 +5,7 @@ import sys
 import time
 import datetime
 
+
 print(socket.gethostbyname(socket.gethostname()))
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_address = ('192.168.0.4', 10001)
@@ -22,7 +23,7 @@ def clamp(minvalue, value, maxvalue):
 
 marker_chars = ['-', '\\', '|', '/', '-', '\\', '|', '/' ]
 
-LOG_DIR = "./files"
+LOG_DIR = "/var/www/html/data/weather"
 if not os.path.isdir(LOG_DIR):
     os.mkdir(LOG_DIR)
 log_file  = open(LOG_DIR + "/log_udp.txt","w", buffering=1)
@@ -43,7 +44,7 @@ try:
         data, address = sock.recvfrom(4096)
         #data, address = [0, 0]
         data = str(data)
-        print("got: " + data)
+        #print("got: " + data)
         m1 = REGEX1.match(data)
         if not m1:
             print("Line: [%s] not matched, skipping" %(data))
@@ -53,11 +54,16 @@ try:
         YEAR = x.strftime("%Y")
         MONTH = x.strftime("%m_%B")
         DAY = x.strftime("%Y_%m_%d_%A")
-        if not os.path.isdir(LOG_DIR + "/" + YEAR):
-            os.mkdir(LOG_DIR + "/" + YEAR)
-        if not os.path.isdir(LOG_DIR + "/" + YEAR + "/" + MONTH):
-            os.mkdir(LOG_DIR + "/" + YEAR + "/" + MONTH)
-        csv_filename = LOG_DIR + "/" + YEAR + "/" + MONTH + "/" + DAY + ".csv"
+        LOG_DIR2 = LOG_DIR + "/" + YEAR
+        if not os.path.isdir(LOG_DIR2):
+            os.mkdir(LOG_DIR2)
+            os.system('ln -s /var/www/html/index2.php ' + LOG_DIR2 + '/index.php')
+        LOG_DIR3 = LOG_DIR2 + "/" + MONTH
+        if not os.path.isdir(LOG_DIR3):
+            os.mkdir(LOG_DIR3)
+            os.system('ln -s /var/www/html/index2.php ' + LOG_DIR3 + '/index.php')
+
+        csv_filename = LOG_DIR3 + "/temperature_" + DAY + ".csv"
         if not os.path.exists(csv_filename):
             f = open(csv_filename, "w")
             f.write("timestamp, temp_in_c, temp_in_f, humidity, voltage\n")
@@ -69,7 +75,7 @@ try:
         if data:
             mode = data[:6]
             msg = data[6:]
-            print(mode, msg)
+            #print(mode, msg)
             if(mode == "TEMP: "):
                 #28.40C, 35.00%h
                 temp_str = m1.group("tempc")
